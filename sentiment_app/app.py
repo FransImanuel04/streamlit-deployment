@@ -1,20 +1,35 @@
 import streamlit as st
 import joblib
 import re
+import os
 
-from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import (
+    StopWordRemoverFactory
+)
+
+# =========================
+# BASE DIRECTORY
+# =========================
+
+BASE_DIR = os.path.dirname(__file__)
 
 # =========================
 # LOAD MODEL & VECTORIZER
 # =========================
 
-model = joblib.load(
-    "sentiment_app/svm_model.pkl"
+model_path = os.path.join(
+    BASE_DIR,
+    "svm_model.pkl"
 )
 
-vectorizer = joblib.load(
-    "sentiment_app/tfidf_vectorizer.pkl"
+vectorizer_path = os.path.join(
+    BASE_DIR,
+    "tfidf_vectorizer.pkl"
 )
+
+model = joblib.load(model_path)
+
+vectorizer = joblib.load(vectorizer_path)
 
 # =========================
 # STOPWORDS
@@ -55,6 +70,7 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
 
     return text
+
 
 def remove_stopwords(text):
 
@@ -103,15 +119,26 @@ if st.button("Predict"):
             transformed_text
         )[0]
 
-        sentiment = id2label[
-            prediction
-        ]
+        # Handle label mapping
+        if prediction in id2label:
 
+            sentiment = id2label[
+                prediction
+            ]
+
+        else:
+
+            sentiment = str(
+                prediction
+            )
+
+        # Display result
         st.success(
             f"Hasil Sentiment: {sentiment}"
         )
 
     else:
+
         st.warning(
             "Masukkan teks terlebih dahulu"
         )
