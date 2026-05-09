@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 model_path = os.path.join(
     BASE_DIR,
-    "svm_model.pkl"
+    "model.pkl"
 )
 
 vectorizer_path = os.path.join(
@@ -87,8 +87,8 @@ def remove_stopwords(text):
 # STREAMLIT UI
 # =========================
 
-st.title("Sentiment Analysis SVM")
-st.write("Analisis sentimen review Tokopedia")
+st.title("Sentiment Analysis Deployment using Streamlit")
+st.write("Analisis sentimen review")
 
 # Input user
 user_input = st.text_area(
