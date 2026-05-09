@@ -1,0 +1,117 @@
+import streamlit as st
+import joblib
+import re
+
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+
+# =========================
+# LOAD MODEL & VECTORIZER
+# =========================
+
+model = joblib.load(
+    "svm_model.pkl"
+)
+
+vectorizer = joblib.load(
+    "tfidf_vectorizer.pkl"
+)
+
+# =========================
+# STOPWORDS
+# =========================
+
+factory = StopWordRemoverFactory()
+
+stopwords = set(
+    factory.get_stop_words()
+)
+
+# =========================
+# LABEL MAPPING
+# =========================
+
+id2label = {
+    0: "negative",
+    1: "neutral",
+    2: "positive"
+}
+
+# =========================
+# TEXT PREPROCESSING
+# =========================
+
+def clean_text(text):
+
+    # lowercase
+    text = text.lower()
+
+    # remove numbers
+    text = re.sub(r'\d+', '', text)
+
+    # remove punctuation
+    text = re.sub(r'[^\w\s]', '', text)
+
+    # remove extra spaces
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    return text
+
+def remove_stopwords(text):
+
+    tokens = text.split()
+
+    filtered_tokens = [
+        word for word in tokens
+        if word not in stopwords
+    ]
+
+    return " ".join(filtered_tokens)
+
+# =========================
+# STREAMLIT UI
+# =========================
+
+st.title("Sentiment Analysis SVM")
+st.write("Analisis sentimen review Tokopedia")
+
+# Input user
+user_input = st.text_area(
+    "Masukkan Review"
+)
+
+# Predict button
+if st.button("Predict"):
+
+    if user_input.strip() != "":
+
+        # preprocessing
+        cleaned_text = clean_text(
+            user_input
+        )
+
+        final_text = remove_stopwords(
+            cleaned_text
+        )
+
+        # TF-IDF transform
+        transformed_text = vectorizer.transform(
+            [final_text]
+        )
+
+        # prediction
+        prediction = model.predict(
+            transformed_text
+        )[0]
+
+        sentiment = id2label[
+            prediction
+        ]
+
+        st.success(
+            f"Hasil Sentiment: {sentiment}"
+        )
+
+    else:
+        st.warning(
+            "Masukkan teks terlebih dahulu"
+        )
