@@ -9,11 +9,11 @@ from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFacto
 # =========================
 
 model = joblib.load(
-    "svm_model.pkl"
+    "sentiment_app/svm_model.pkl"
 )
 
 vectorizer = joblib.load(
-    "tfidf_vectorizer.pkl"
+    "sentiment_app/tfidf_vectorizer.pkl"
 )
 
 # =========================
