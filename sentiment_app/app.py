@@ -30,16 +30,19 @@ st.markdown("""
 
 .title {
     text-align: center;
-    font-size: 48px;
+    font-size: 84px;
     font-weight: bold;
-    color: #1f2937;
+    color: #111827;
+    line-height: 1.0;
+    margin-bottom:10px;
 }
 
 .subtitle {
     text-align: center;
-    font-size: 18px;
+    font-size: 24px;
     color: #6b7280;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
+    font-weight: 400;
 }
 
 .stTextArea textarea {
@@ -198,7 +201,7 @@ st.markdown(
 )
 
 st.markdown(
-    '<p class="subtitle">Analisis Sentimen Review Tokopedia menggunakan Deep Learning SVM</p>',
+    '<p class="subtitle">Analisis Sentimen Review Tokopedia menggunakan Deep Learning</p>',
     unsafe_allow_html=True
 )
 
